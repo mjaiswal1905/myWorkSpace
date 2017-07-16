@@ -6,9 +6,9 @@ class Newapp(Profile,Data):
         Profile.__init__(self,appid,lifecycle,True)
         Data.__init__(self)
         
-    def display(self):
+    def show(self):
         print self.appid + '_' + self.lifecycle
         print self.user
 
 c = Newapp(sys.argv[1],sys.argv[2])
-c.display()
+c.show()

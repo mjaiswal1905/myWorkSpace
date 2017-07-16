@@ -1,8 +1,0 @@
-Engaging Start for Weblogic Component: bi_server1
-PROGRESS:      	[xxxxx---------------] 25%  Time: 00:00:30
-STATUS:		bi_server1 	= RUNNING
-
-
-m, s = divmod(seconds, 60)
-h, m = divmod(m, 60)
-print "%02d:%02d:%02d" % (h, m, s)
