@@ -2,7 +2,7 @@
 """Download images from remote location and stores it in local disk.
 
 Args:
-    text-file: plaintext file containing URLs, one per line.
+    text-file: plain-text file containing URLs, one per line.
 
 Author:
     Manish Jaiswal (mjaiswal1905@gmail.com)
@@ -15,56 +15,58 @@ import sys
 import requests
 
 
-def _download(_url):
-    """Download the image from given url and store in local disk.
+class DownloadImages:
 
-    Args:
-        _url: URL of a image(.jpg)
+    def __init__(self, filepath):
+        self.filepath = filepath
 
-    Returns:
-        disk location of stored image
-    """
-    _response = requests.get(_url, stream=True)
+    def read_file(self):
+        """Fetch a list of URLs from a plaintext file and pass it to _download method.
+        """
+        if not os.path.isfile(self.filepath):
+            logging.error("File path {} does not exist. Exiting...".format(os.path.abspath(self.filepath)))
+            sys.exit(1)
 
-    try:
-        _file = os.path.basename(_url)
+        with open(self.filepath, 'r') as _fh:
+            logging.info("Start reading file: {}".format(os.path.abspath(self.filepath)))
+            for _line in _fh.readlines():
+                _url = _line.rstrip()
+                logging.debug("URL: {}".format(_url))
+                _location = self._download(_url)
+                logging.info("Image location on disk: {}".format(os.path.abspath(_location)))
 
-        with open(_file, 'wb') as _image:
-            for _chunk in _response.iter_content(chunk_size=1024*1024):
-                if _chunk:
-                    _image.write(_chunk)
-        _response.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        logging.error(err)
-        sys.exit(1)
+            logging.info("Finished reading file")
 
-    return _file
+    @staticmethod
+    def _download(_url):
+        """Download the image from given url and store in local disk.
 
+        Args:
+            _url: URL of a image(.jpg)
 
-def read_file(file_path):
-    """Fetch a list of URLs from a plaintext file and pass it to _download method.
+        Returns:
+            disk location of stored image
+        """
+        _response = requests.get(_url, stream=True)
 
-    Args:
-        file_path: path of utf-8 text document.
-    """
-    if not os.path.isfile(file_path):
-        logging.error("File path {} does not exist. Exiting...".format(os.path.abspath(file_path)))
-        sys.exit(1)
+        try:
+            _file = os.path.basename(_url)
 
-    with open(file_path, 'r') as _fh:
-        logging.info("Start reading file: {}".format(os.path.abspath(file_path)))
-        for _line in _fh.readlines():
-            _url = _line.rstrip()
-            logging.debug("URL: {}".format(_url))
-            _location = _download(_url)
-            logging.info("Image location on disk: {}".format(os.path.abspath(_location)))
+            with open(_file, 'wb') as _image:
+                for _chunk in _response.iter_content(chunk_size=1024*1024):
+                    if _chunk:
+                        _image.write(_chunk)
+            _response.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            logging.error(err)
+            sys.exit(1)
 
-        logging.info("Finished reading file")
+        return _file
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Download images from remote location and stores it in local disk.')
-    parser.add_argument(dest='text_file', help='plaintext file containing URLs, one per line.')
+    parser.add_argument(dest='text_file', help='plain-text file containing URLs, one per line.')
     parser.add_argument('--debug', dest='logLevel', action='store_const', const='DEBUG', default='INFO',
                         help='enable DEBUG logging level')
     args = parser.parse_args()
@@ -76,4 +78,5 @@ if __name__ == '__main__':
                         filename='my_app.log',
                         filemode='a')
 
-    read_file(text_file)
+    images = DownloadImages(text_file)
+    images.read_file()
