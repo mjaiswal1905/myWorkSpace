@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-"""Test read_file function
-"""
 
 import unittest
 from unittest.mock import patch, mock_open
@@ -20,6 +18,7 @@ class TestReadFiles(unittest.TestCase):
     @patch('my_app.download_images.os.path.abspath')
     @patch('my_app.download_images.DownloadImages._download')
     def test_read_file(self, mock_isfile, mock_abspath, mock_download):
+        """Test read_file function"""
         mock_isfile.return_value = True
         mock_abspath.return_value = 'file/path/image'
         mock_download.return_value = 'image'
@@ -30,5 +29,6 @@ class TestReadFiles(unittest.TestCase):
 
     @requests_mock.mock()
     def test_download(self, m):
+        """Test _download function"""
         m.get(self.file_content_mock)
         self.assertEqual(self.images._download(self.file_content_mock), '271947.jpg')
