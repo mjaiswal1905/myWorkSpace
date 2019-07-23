@@ -4,9 +4,6 @@
 Args:
     text-file: plaintext file containing URLs, one per line.
 
-Returns:
-    disk location of stored images.
-
 Author:
     Manish Jaiswal (mjaiswal1905@gmail.com)
 """
@@ -49,9 +46,6 @@ def read_file(file_path):
 
     Args:
         file_path: path of utf-8 text document.
-
-    Returns:
-        prints disk location of stored images
     """
     if not os.path.isfile(file_path):
         logging.error("File path {} does not exist. Exiting...".format(os.path.abspath(file_path)))
@@ -62,7 +56,8 @@ def read_file(file_path):
         for _line in _fh.readlines():
             _url = _line.rstrip()
             logging.debug("URL: {}".format(_url))
-            logging.info("Image location on disk: {}".format(os.path.abspath(_download(_url))))
+            _location = _download(_url)
+            logging.info("Image location on disk: {}".format(os.path.abspath(_location)))
 
         logging.info("Finished reading file")
 
