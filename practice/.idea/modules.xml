@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://E:/backup/Work/Wipro Technologies/GIT/12c/.idea/12c.iml" filepath="E:/backup/Work/Wipro Technologies/GIT/12c/.idea/12c.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/practice.iml" filepath="$PROJECT_DIR$/.idea/practice.iml" />
     </modules>
   </component>
